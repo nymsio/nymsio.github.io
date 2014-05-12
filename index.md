@@ -7,11 +7,11 @@ image:
 
 ## 1. Introduction
 
-Even though e-mail encryption software based on open standards such as S/MIME and OpenPGP has been widely available for the last 20 years email encryption is rarely used today. Users find email encryption difficult to use, especially dealing with key management.
+E-mail encryption software based on open standards such as S/MIME and OpenPGP has been widely available for the last 20 years email and yet, encryption is rarely used today. Users find email encryption difficult to use, especially dealing with key management.
 
 Currently PGP public keys are distributed from public directories called key servers where keys can be published permanently by anybody.  When new keys are uploaded to key servers there is no attempt to verify that the email address or other name information in the uploaded key is valid, or even that another key under the same email address doesn't already exist.  If somebody publishes a false key under your name or email address there is nothing you can do to remove the malicious key since the system provides no way to delete published key information and no way to know who should have permission to remove false information.
 
-The way that these problems are supposed to be resolved is with an authentication model called the Web of Trust where users sign keys of other users after verifying that they are who they say they are.  In theory, if some due diligence is applied in signing other people's keys and a sufficient number of people participate you'll be able to follow a short chain of signatures from people you already know and trust to new untrusted keys you download from a key server.  In practice this has never worked out very well as it burdens users with the task of manually finding people to sign their keys and even experts find the Web of Trust model difficult to reason about.
+The way that these problems are supposed to be resolved is with an authentication model called the Web of Trust where users sign keys of other users after verifying that they are who they say they are.  In theory, if some due diligence is applied in signing other people's keys and a sufficient number of people participate you'll be able to follow a short chain of signatures from people you already know and trust to new untrusted keys you download from a key server.  In practice this has never worked out very well as it burdens users with the task of manually finding people to sign their keys and even experts find the Web of Trust model difficult to reason about.  This also reveals the social graph of certain communities which may place users at risk for their associations.  Such signatures also reveal metadata about times and thus places for meetings for key signings.
 
 The Nyms Identity Directory is a replacement for all of this.  Keyservers are replaced with an identity directory that gives users full control over publication of their key information and web of trust is replaced with a distributed network of trusted notaries which validate user keys with an email verification protocol.
 
@@ -111,7 +111,7 @@ If this is the first time the system has contacted the SMTP server for this prov
 
 1. MX records
 2. STARTTLS availability
-3. Fingerprint of TLS certificate presented by SMTP server
+3. Full TLS certificate chain presented by SMTP server
 
 If this is not the first time performing the verification protocol against this server, then the stored information for this provider is compared against the information collected during this run of the protocol.  An alert will be generated for investigation if any of this information has changed, but under the default operating policy this will not prevent the verification from successfully completed.
 
@@ -189,7 +189,7 @@ In order to strengthen the value of this verification, the directory server whic
 
 Preventing the final server from knowing the identity of the user performing the query means that a dishonest directory server cannot effectively distribute bad keys without detection since the server cannot guess if the user has previously requested this key.  Additionally, users are protected from leaking too much information about who they are communicating with based on the keys they are requesting.
 
-###3.3 Key Revocation
+###3.3 Certificate Revocation and Expiry
 
 Revocation of certified keys published in the directory is a difficult problem which must be handled correctly to ensure that stale useless keys do not accumulate and so that the system can accommodate users who lose access to their private keys.
 
