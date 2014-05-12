@@ -205,6 +205,13 @@ ID servers allow users to segment identity information so that different types o
 
 #### 3.5 Key Obfuscation
 
+As an obstacle to enumeration of the entire directory database or to search for all users of a certain provider or other attempts to mass harvest information identity records are encrypted before storage.  Both the key for encryption and the index for querying the record are derived by applying the scrypt() key derivation function to the address to be queried.
+
+    scrypt("user@gmail.com") --> 256 bits split into: 128 bit index, 128 bit encryption key
+    
+Additionally this raises the computational difficulty of enumerating the database remotely with mass queries.
+
+
 ## 4. Client Agent
 
 Clients in the Nyms system have a lot of responsibilities compared to clients of the traditional OpenPGP key server network which simply make HKS queries to a key server.
@@ -221,6 +228,16 @@ Rather than require every messaging client to implement all of this behavior the
 ### 4.1 Security Policy
 
 Existing messaging applications such as E-Mail clients which include integrated PGP encryption functionality implement whatever ad-hoc strategy the author decided was the best plan for importing public keys, resolving conflicts, and determining which keys are trustworthy.
+
+The Nyms client agent aims to standardize the security strategy of messaging applications by providing a configuration language to explicitly define a security policy.
+
+Here are some examples of the types of decisions that are in the scope of such a security policy:
+
+ * Should keys be automatically downloaded and imported  from SKS servers to verify signatures
+ * Are keys stored on the local GPG keyring automatically trusted for encryption
+ * Do manually imported keys have a higher priority than keys discovered in other ways.
+ * Is outgoing mail signed by default?
+ 
 
 
 
